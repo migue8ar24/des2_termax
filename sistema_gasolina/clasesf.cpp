@@ -7,15 +7,84 @@
 
 using namespace std;
 
-
-
-EstServ:: EstServ(string nom, string ger, Zona reg, string ubi){
-        nombre = nom;
-        codigo = rand() % 100; //verificacion de no existente
-        gerente = ger;
-        region = reg;
-        ubicacion = ubi;
+    Tanque::Tanque(int dispReg, int dispPre, int dispEco, int capReg, int capPre, int capEco) {
+        gasDispRegular = dispReg;
+        gasDispPremium = dispPre;
+        gasDispEcoExtra = dispEco;
+        capacidadRegular = capReg;
+        capacidadPremium = capPre;
+        capacidadEcoExtra = capEco;
     }
+
+    // Getters
+    int Tanque::getDispRegular() {
+        return gasDispRegular;
+    }
+
+    int Tanque::getDispPremium() {
+        return gasDispPremium;
+    }
+
+    int Tanque::getDispEcoExtra() {
+        return gasDispEcoExtra;
+    }
+
+    int Tanque::getCapacidadRegular() {
+        return capacidadRegular;
+    }
+
+    int Tanque::getCapacidadPremium() {
+        return capacidadPremium;
+    }
+
+    int Tanque::getCapacidadEcoExtra() {
+        return capacidadEcoExtra;
+    }
+
+    // Setters
+    void Tanque::setDispRegular(int _gasDispRegular) {
+        gasDispRegular = _gasDispRegular;
+    }
+
+    void Tanque::setDispPremium(int _gasDispPremium) {
+        gasDispPremium = _gasDispPremium;
+    }
+
+    void Tanque::setDispEcoExtra(int _gasDispEcoExtra) {
+        gasDispEcoExtra = _gasDispEcoExtra;
+    }
+
+    void Tanque::setCapacidadRegular(int _capacidadRegular) {
+        capacidadRegular = _capacidadRegular;
+    }
+
+    void Tanque::setCapacidadPremium(int _capacidadPremium) {
+        capacidadPremium = _capacidadPremium;
+    }
+
+    void Tanque::setCapacidadEcoExtra(int _capacidadEcoExtra) {
+        capacidadEcoExtra = _capacidadEcoExtra;
+    }
+
+    Tanque::~Tanque() {}
+
+    //metodos problema
+
+
+
+    EstServ:: EstServ(string nom, string ger, Zona reg, string ubi){
+            nombre = nom;
+            codigo = rand() % 100; //verificacion de no existente
+            gerente = ger;
+            region = reg;
+            ubicacion = ubi;
+        }
+
+    EstServ::EstServ()
+        : nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion("") {
+    }
+
+    EstServ::~EstServ() {}
 
     // Getters
     string EstServ:: getNombre() {
@@ -53,68 +122,29 @@ EstServ:: EstServ(string nom, string ger, Zona reg, string ubi){
 
     //metodos problema
 
+    void EstServ::verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra) {
+        // Verificación para combustible Regular
+        int totalRegular = vendidoRegular + tanque.getDispRegular();
+        if (totalRegular < 0.95 * tanque.getCapacidadRegular()) {
+            cout << "Posible fuga detectada en combustible Regular." << endl;
+        }
 
+        // Verificación para combustible Premium
+        int totalPremium = vendidoPremium + tanque.getDispPremium();
+        if (totalPremium < 0.95 * tanque.getCapacidadPremium()) {
+            cout << "Posible fuga detectada en combustible Premium." << endl;
+        }
 
+        // Verificación para combustible EcoExtra
+        int totalEcoExtra = vendidoEcoExtra + tanque.getDispEcoExtra();
+        if (totalEcoExtra < 0.95 * tanque.getCapacidadEcoExtra()) {
+            cout << "Posible fuga detectada en combustible Extra." << endl;
+        }
 
-    Tanque::Tanque(TComb tipo, int disp, int cap){
-        tipoGas = tipo; //revisar el enum
-        gasDisp= disp;
-        capacidad=cap;
+        // Si no hay fugas
+        if (totalRegular > 0.95 * tanque.getCapacidadRegular() && totalPremium > 0.95 * tanque.getCapacidadPremium() && totalEcoExtra > 0.95 * tanque.getCapacidadEcoExtra())
+            cout << "No se detectaron fugas en la estacion." << endl;
     }
-
-    // Getters
-    TComb Tanque::getTipo() {
-        return tipoGas;
-    }
-    int Tanque::getDisp() {
-        return gasDisp;
-    }
-    int Tanque::getCapacidad() {
-        return capacidad;
-    }
-
-    //setters
-    void Tanque::setGas(TComb _tipoGas) {
-        tipoGas = _tipoGas;
-    }
-    void Tanque::setDisp(int _gasDisp) {
-        gasDisp = _gasDisp;
-    }
-    void Tanque::setCapacidad(int _capacidad) {
-        capacidad = _capacidad;
-    }
-
-    //metodos problema
-
-
-
-
-
-
-    Surtidor::Surtidor(string mod){
-        codId = rand() % 100; // no repetido
-        modelo = mod;
-    }
-
-    // Getters
-    int Surtidor::getCodId() {
-        return codId;
-    }
-    string Surtidor::getModelo() {
-        return modelo;
-    }
-
-    //setters
-    void Surtidor::setCodId(int  _codId) {
-        codId = _codId;
-    }
-    void Surtidor::setModelo(string _modelo) {
-        modelo = _modelo;
-    }
-
-    //metodos problema
-
-
 
     Venta::Venta(int _cantidad, TComb _comb, TPago _pago, int _documento,int _pagado){
         time_t ahora = time(nullptr);
