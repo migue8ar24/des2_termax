@@ -27,6 +27,58 @@ enum class Zona{
     SUR
 };
 
+class Tanque {
+private:
+    int gasDispRegular;   // Cantidad disponible de Regular
+    int gasDispPremium;   // Cantidad disponible de Premium
+    int gasDispEcoExtra;  // Cantidad disponible de EcoExtra
+    int capacidadRegular; // Capacidad total de Regular
+    int capacidadPremium; // Capacidad total de Premium
+    int capacidadEcoExtra;// Capacidad total de EcoExtra
+
+public:
+    Tanque(int dispReg, int dispPre, int dispEco, int capReg, int capPre, int capEco);
+
+    // Getters
+    int getDispRegular();
+    int getDispPremium();
+    int getDispEcoExtra();
+    int getCapacidadRegular();
+    int getCapacidadPremium();
+    int getCapacidadEcoExtra();
+
+    // Setters
+    void setDispRegular(int _gasDispRegular);
+    void setDispPremium(int _gasDispPremium);
+    void setDispEcoExtra(int _gasDispEcoExtra);
+    void setCapacidadRegular(int _capacidadRegular);
+    void setCapacidadPremium(int _capacidadPremium);
+    void setCapacidadEcoExtra(int _capacidadEcoExtra);
+
+    //metodos problema, funciones amigas
+
+    ~Tanque();
+};
+
+class Surtidor{
+private:
+    int codId;
+    string modelo;
+public:
+    Surtidor(string mod);
+
+    // Getters
+    int getCodId();
+    string getModelo();
+
+    //setters
+    void setCodId(int  _codId);
+    void setModelo(string _modelo);
+
+    //metodos problema
+
+    ~Surtidor();
+};
 
 class EstServ{
 private:
@@ -54,57 +106,12 @@ public:
     void setRegion(Zona _region) ;
     void setUbicacion(string _ubicacion) ;
 
-    //metodos problema
+    //metodos problema, funciones amigas
+
+    void verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra);
 
     ~EstServ();
 };
-
-class Tanque{
-private:
-    TComb tipoGas;
-    int gasDisp;
-    int capacidad;
-
-public:
-    Tanque(TComb tipo, int disp, int cap);
-
-    // Getters
-    TComb getTipo() ;
-    int getDisp();
-    int getCapacidad();
-
-    //setters
-    void setGas(TComb _tipoGas);
-    void setDisp(int _gasDisp);
-    void setCapacidad(int _capacidad);
-
-    //metodos problema
-
-    ~Tanque();
-
-
-};
-
-class Surtidor{
-private:
-    int codId;
-    string modelo;
-public:
-    Surtidor(string mod);
-
-    // Getters
-    int getCodId();
-    string getModelo();
-
-    //setters
-    void setCodId(int  _codId);
-    void setModelo(string _modelo);
-
-    //metodos problema
-
-    ~Surtidor();
-};
-
 
 class Venta{
 private:
