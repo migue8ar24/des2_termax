@@ -9,89 +9,22 @@ using namespace std;
 
 
 
-EstServ:: EstServ(string nom, string ger, Zona reg, string ubi){
-    nombre = nom;
-    codigo = rand() % 100; //verificacion de no existente
-    gerente = ger;
-    region = reg;
-    ubicacion = ubi;
-}
 
-EstServ::EstServ()
-    : nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion("") {
-}
 
-// Getters
-string EstServ:: getNombre() {
-    return nombre;
-}
-int EstServ::getCodigo() {
-    return codigo;
-}
-string EstServ::getGerente() {
-    return gerente;
-}
-Zona EstServ::getRegion() {
-    return region;
-}
-string EstServ::getUbicacion() {
-    return  ubicacion;
-}
-
-//setters
-void EstServ::setNombre(string _nombre) {
-    nombre = _nombre;
-}
-void EstServ::setCodigo(int _codigo) {
-    codigo = _codigo;
-}
-void EstServ::setGerente(string _gerente) {
-    gerente = _gerente;
-}
-void EstServ::setRegion(Zona _region) {
-    region = _region;
-}
-void EstServ::setUbicacion(string _ubicacion) {
-    ubicacion = _ubicacion;
-}
-
-EstServ::~EstServ() {}
-
-//metodos problema
-
-void EstServ::verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra) {
-    // Verificación para combustible Regular
-    int totalRegular = vendidoRegular + tanque.getDispRegular();
-    if (totalRegular < 0.95 * tanque.getCapacidadRegular()) {
-        cout << "Posible fuga detectada en combustible Regular." << endl;
+Tanque::Tanque(Surtidor* arraySurtidor[12]) {
+    capacidadRegular = 100+ rand() % 200;
+    capacidadPremium = 100+ rand() % 200;
+    capacidadEcoExtra = 100+ rand() % 200;
+    gasDispRegular = 100+ rand() % capacidadRegular;
+    gasDispPremium = 100+ rand() % capacidadPremium;
+    gasDispEcoExtra = 100+ rand() % capacidadEcoExtra;
+    activo = true;
+    for (int i = 0; i < 12; i++) {
+        arraySurtidores[i] = arraySurtidor[i];  // Asignar el arreglo recibido
     }
-
-    // Verificación para combustible Premium
-    int totalPremium = vendidoPremium + tanque.getDispPremium();
-    if (totalPremium < 0.95 * tanque.getCapacidadPremium()) {
-        cout << "Posible fuga detectada en combustible Premium." << endl;
-    }
-
-    // Verificación para combustible EcoExtra
-    int totalEcoExtra = vendidoEcoExtra + tanque.getDispEcoExtra();
-    if (totalEcoExtra < 0.95 * tanque.getCapacidadEcoExtra()) {
-        cout << "Posible fuga detectada en combustible Extra." << endl;
-    }
-
-    // Si no hay fugas
-    if (totalRegular > 0.95 * tanque.getCapacidadRegular() && totalPremium > 0.95 * tanque.getCapacidadPremium() && totalEcoExtra > 0.95 * tanque.getCapacidadEcoExtra())
-        cout << "No se detectaron fugas en la estacion." << endl;
 }
 
 
-Tanque::Tanque(int dispReg, int dispPre, int dispEco, int capReg, int capPre, int capEco) {
-    gasDispRegular = dispReg;
-    gasDispPremium = dispPre;
-    gasDispEcoExtra = dispEco;
-    capacidadRegular = capReg;
-    capacidadPremium = capPre;
-    capacidadEcoExtra = capEco;
-}
 
 // Getters
 int Tanque::getDispRegular() {
@@ -116,6 +49,9 @@ int Tanque::getCapacidadPremium() {
 
 int Tanque::getCapacidadEcoExtra() {
     return capacidadEcoExtra;
+}
+bool Tanque::getActivo() {
+    return activo;
 }
 
 // Setters
@@ -142,8 +78,13 @@ void Tanque::setCapacidadPremium(int _capacidadPremium) {
 void Tanque::setCapacidadEcoExtra(int _capacidadEcoExtra) {
     capacidadEcoExtra = _capacidadEcoExtra;
 }
+void Tanque::setActivo(bool _activo) {
+    activo = _activo;
+}
 
-Tanque::~Tanque() {}
+Tanque::~Tanque() {
+    delete[] arraySurtidores;
+}
 
 //metodos problema
 
@@ -155,6 +96,11 @@ Surtidor::Surtidor(string mod){
     codId = rand() % 100; // no repetido
     modelo = mod;
 }
+Surtidor::Surtidor(){
+    codId = rand() % 100; // no repetido
+    modelo = "";
+}
+
 
 // Getters
 int Surtidor::getCodId() {
@@ -190,6 +136,8 @@ Venta::Venta(int _cantidad, TComb _comb, TPago _pago, int _documento,int _pagado
     pago =_pago;
     documento = _documento;
     pagado = _pagado;
+}
+Venta::Venta(): cantidad(0), comb(TComb::REGULAR), pago(TPago::EFECTIVO), documento(0), pagado(0){
 }
 
 // Getters
@@ -249,3 +197,94 @@ void Venta::mostrarVenta() {
     cout << "Monto Pagado: " << pagado << endl;
 }
 
+
+EstServ:: EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVenta, Tanque* tanqueGas ){
+    nombre = nom;
+    codigo = rand() % 100; //verificacion de no existente
+    gerente = ger;
+    region = reg;
+    ubicacion = ubi;
+    listaVentas = arrayVenta;
+    tanquePrincipal = tanqueGas;
+
+}
+
+EstServ::EstServ(): nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion(""), listaVentas(nullptr), tanquePrincipal(nullptr){
+}
+
+// Getters
+string EstServ:: getNombre() {
+    return nombre;
+}
+int EstServ::getCodigo() {
+    return codigo;
+}
+string EstServ::getGerente() {
+    return gerente;
+}
+Zona EstServ::getRegion() {
+    return region;
+}
+string EstServ::getUbicacion() {
+    return  ubicacion;
+}
+Venta EstServ::getListaVentas() {
+    return  **listaVentas;
+}
+Tanque EstServ::getTanquePrincipal() {
+    return  *tanquePrincipal;
+}
+
+
+//setters
+void EstServ::setNombre(string _nombre) {
+    nombre = _nombre;
+}
+void EstServ::setCodigo(int _codigo) {
+    codigo = _codigo;
+}
+void EstServ::setGerente(string _gerente) {
+    gerente = _gerente;
+}
+void EstServ::setRegion(Zona _region) {
+    region = _region;
+}
+void EstServ::setUbicacion(string _ubicacion) {
+    ubicacion = _ubicacion;
+}
+void EstServ::setListaVentas(Venta** _listaVentas) {
+    listaVentas = _listaVentas;
+}
+void EstServ::setTanquePrincipal(Tanque* _tanque) {
+    tanquePrincipal = _tanque;
+}
+
+EstServ::~EstServ() {
+    delete[] listaVentas;
+}
+
+//metodos problema
+
+void EstServ::verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra) {
+    // Verificación para combustible Regular
+    int totalRegular = vendidoRegular + tanque.getDispRegular();
+    if (totalRegular < 0.95 * tanque.getCapacidadRegular()) {
+        cout << "Posible fuga detectada en combustible Regular." << endl;
+    }
+
+    // Verificación para combustible Premium
+    int totalPremium = vendidoPremium + tanque.getDispPremium();
+    if (totalPremium < 0.95 * tanque.getCapacidadPremium()) {
+        cout << "Posible fuga detectada en combustible Premium." << endl;
+    }
+
+    // Verificación para combustible EcoExtra
+    int totalEcoExtra = vendidoEcoExtra + tanque.getDispEcoExtra();
+    if (totalEcoExtra < 0.95 * tanque.getCapacidadEcoExtra()) {
+        cout << "Posible fuga detectada en combustible Extra." << endl;
+    }
+
+    // Si no hay fugas
+    if (totalRegular > 0.95 * tanque.getCapacidadRegular() && totalPremium > 0.95 * tanque.getCapacidadPremium() && totalEcoExtra > 0.95 * tanque.getCapacidadEcoExtra())
+        cout << "No se detectaron fugas en la estacion." << endl;
+}

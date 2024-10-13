@@ -6,6 +6,6 @@ using namespace std;
 #define FUNCH_H
 
 
-EstServ crearEst();
+EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas);
 
 #endif // FUNCH_H

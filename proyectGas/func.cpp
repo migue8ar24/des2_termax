@@ -6,7 +6,7 @@
 using namespace std;
 
 
-EstServ crearEst(){
+EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas){
     string nom;
     string ger;
     string reg;
@@ -33,7 +33,8 @@ EstServ crearEst(){
     cout<<"ingrese la ubicacion GPS de la estacion (latitud y longitud)"<<endl;
     cin>>ubi;
 
-    EstServ est(nom,ger,z, ubi);
+
+    EstServ* est = new EstServ(nom, ger, z, ubi, arrayVenta, tanqueGas);
 
 
     return est;
