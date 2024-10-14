@@ -5,9 +5,17 @@ CONFIG -= qt
 
 SOURCES += \
         clasesf.cpp \
+        classestservicio.cpp \
         func.cpp \
-        main.cpp
+        main.cpp \
+        surtidor.cpp \
+        tanque.cpp \
+        venta.cpp
 
 HEADERS += \
     clasesf.h \
-    funcH.h
+    classestservicio.h \
+    funcH.h \
+    surtidor.h \
+    tanque.h \
+    venta.h

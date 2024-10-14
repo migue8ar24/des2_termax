@@ -13,9 +13,9 @@ int main()
     unsigned short int tam = 15;
     unsigned short int accion = 0;
     unsigned short int contEstaciones = 0;
-    unsigned short int precioReg= 10000;
-    unsigned short int precioPrem=10000;
-    unsigned short int precioEco=10000;
+    //unsigned short int precioReg= 10000;
+    //unsigned short int precioPrem=10000;
+    //unsigned short int precioEco=10000;
 
     EstServ** estaciones = new EstServ*[tam];
     for (int i = 0; i < tam; ++i) {
@@ -43,16 +43,16 @@ int main()
                     arrayVentas[i] = new Venta();
                 }
 
-                Surtidor* surtidores[12];
+                Surtidor surtidores[12];
                 for (int i = 0; i < 12; i++) {
-                    surtidores[i] = new Surtidor();  // Crear objetos dinámicamente
+                    surtidores[i] = Surtidor();  // Crear objetos dinámicamente
                 }
 
                 // Crear un tanque de gas
-                Tanque* tanqueG = new Tanque(surtidores);
+                Tanque tanqueG;
 
                 // Llamar a crearEst pasando el array de ventas y el tanque
-                estaciones[contEstaciones] = crearEst(arrayVentas, tanqueG);
+                estaciones[contEstaciones] = crearEst(arrayVentas, tanqueG, surtidores);
 
                 // Incrementar el contador de estaciones
                 contEstaciones++;
@@ -63,15 +63,23 @@ int main()
                 cout<<"Eliminar E/S (si no posee surtidores activos): 2"<<endl;
                 cout<<"Que estacion desea eliminar?(ingrese el nombre de la estacion))"<<endl;
                 string delStation = "";
+                bool desact = true;
                 cin>>delStation;
                 for (int i=0;i<=tam;i++){
-                    if (estaciones[i]-> getNombre()==delStation){
-                        delete estaciones[i]; //fuga de memoria?
-                        for (int j= tam;j>=i;j--){
-                            estaciones[j-1]=estaciones[j];
+                    if (estaciones[i]->getNombre()==delStation){
+                        for(int j= 0; j<=12;j++){
+                            Surtidor* verificar = estaciones[i]->getSurtidores();
+                            if (verificar[j].getActivado()==true){
+                                desact = false;
+                                break;
+                            }
                         }
-                        estaciones[tam] = new EstServ ();
+
+                    }
+                    if (desact==true){
+                        delete estaciones[i];
                         contEstaciones-=1;
+                        cout<<"estacion borrada"<<endl;
                         break;
                     }
                 }
@@ -82,19 +90,7 @@ int main()
                 cout<<"a"<<endl;
             }
             else if (accionRed == 4){
-                cout<<"fijar precios de combustible"<<endl;
-                unsigned short int newReg;
-                unsigned short int newPrem;
-                unsigned short int newEco;
-                cout<<"ingrese el precio de la regular"<<endl;
-                cin>>newReg;
-                cout<<"ingrese el precio de la premium"<<endl;
-                cin>>newPrem;
-                cout<<"ingrese el precio de la ecoExtra"<<endl;
-                cin>>newEco;
-                precioReg= newReg;
-                precioPrem=newPrem;
-                precioEco=newEco;
+
 
             }
             else{
@@ -111,7 +107,7 @@ int main()
             cout<<"a"<<endl;
         }
         else {
-            cout<<"a"<<endl;
+            cout<<"Accion no disponible"<<endl;
         }
 
         cout<<"desea cerrar el sistema?(presione un numero distinto a 1 para salir)"<<endl;

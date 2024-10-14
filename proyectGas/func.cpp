@@ -2,11 +2,16 @@
 #include <string> //manejo strings
 #include <cstdlib> // numeros aleatorios
 #include <ctime> //obtener tiempo de venta
+
 #include "clasesf.h"
+#include "classestservicio.h"
+#include "venta.h"
+#include "tanque.h"
+
 using namespace std;
 
 
-EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas){
+EstServ* crearEst(Venta** arrayVenta, Tanque tanqueGas, Surtidor* surt){
     string nom;
     string ger;
     string reg;
@@ -34,8 +39,10 @@ EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas){
     cin>>ubi;
 
 
-    EstServ* est = new EstServ(nom, ger, z, ubi, arrayVenta, tanqueGas);
+    EstServ* est = new EstServ(nom, ger, z, ubi, arrayVenta, tanqueGas, surt);
 
 
     return est;
 }
+
+
