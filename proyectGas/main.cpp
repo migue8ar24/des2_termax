@@ -13,6 +13,9 @@ int main()
     unsigned short int tam = 15;
     unsigned short int accion = 0;
     unsigned short int contEstaciones = 0;
+    unsigned short int precioReg= 10000;
+    unsigned short int precioPrem=10000;
+    unsigned short int precioEco=10000;
 
     EstServ** estaciones = new EstServ*[tam];
     for (int i = 0; i < tam; ++i) {
@@ -62,8 +65,8 @@ int main()
                 string delStation = "";
                 cin>>delStation;
                 for (int i=0;i<=tam;i++){
-                    cout<<estaciones[i]->getNombre()<<endl;
                     if (estaciones[i]-> getNombre()==delStation){
+                        delete estaciones[i]; //fuga de memoria?
                         for (int j= tam;j>=i;j--){
                             estaciones[j-1]=estaciones[j];
                         }
@@ -71,17 +74,28 @@ int main()
                         contEstaciones-=1;
                         break;
                     }
-                    else {
-                        cout<<"estacion no encontrada"<<endl;
-                    }
                 }
+
 
             }
             else if (accionRed == 3){
                 cout<<"a"<<endl;
             }
             else if (accionRed == 4){
-                cout<<"a"<<endl;
+                cout<<"fijar precios de combustible"<<endl;
+                unsigned short int newReg;
+                unsigned short int newPrem;
+                unsigned short int newEco;
+                cout<<"ingrese el precio de la regular"<<endl;
+                cin>>newReg;
+                cout<<"ingrese el precio de la premium"<<endl;
+                cin>>newPrem;
+                cout<<"ingrese el precio de la ecoExtra"<<endl;
+                cin>>newEco;
+                precioReg= newReg;
+                precioPrem=newPrem;
+                precioEco=newEco;
+
             }
             else{
                 cout<<"a"<<endl;
