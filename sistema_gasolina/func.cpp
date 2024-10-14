@@ -2,11 +2,17 @@
 #include <string> //manejo strings
 #include <cstdlib> // numeros aleatorios
 #include <ctime> //obtener tiempo de venta
+#include <fstream>
+
 #include "clasesf.h"
+#include "classestservicio.h"
+#include "venta.h"
+#include "tanque.h"
+
 using namespace std;
 
 
-EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas){
+EstServ* crearEst(Venta** arrayVenta, Tanque tanqueGas, Surtidor* surt){
     string nom;
     string ger;
     string reg;
@@ -34,7 +40,7 @@ EstServ* crearEst(Venta** arrayVenta, Tanque* tanqueGas){
     cin>>ubi;
 
 
-    EstServ* est = new EstServ(nom, ger, z, ubi, arrayVenta, tanqueGas);
+    EstServ* est = new EstServ(nom, ger, z, ubi, arrayVenta, tanqueGas, surt);
 
 
     return est;
@@ -77,9 +83,38 @@ void simularVenta(EstServ* estacion, Surtidor** surtidores, int numSurtidores, V
     float montoTotal = litrosVendidos * precioPorLitro;
     cout << "Monto total a pagar: $" << montoTotal << endl;
 
-    Venta* ventaRealizada = new Venta(litrosVendidos, TComb::REGULAR, TPago::EFECTIVO, 123456, montoTotal);
-    arrayVenta[0] = ventaRealizada; // Almacena la venta en el array
+    //Venta* ventaRealizada = new Venta(litrosVendidos, TComb::REGULAR, TPago::EFECTIVO, 123456, montoTotal);
+    //arrayVenta[0] = ventaRealizada; // Almacena la venta en el array
 
     // Mostrar datos de la venta
-    ventaRealizada->mostrarVenta();
+    //ventaRealizada->mostrarVenta();
+}
+
+void guardarVentas(Venta** arrayVentas, int numVentas, const char* filename) {
+    std::ofstream archivo(filename);
+    if (!archivo) {
+        std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < numVentas; ++i) {
+        archivo << *arrayVentas[i];  // Serializar cada venta
+    }
+
+    archivo.close();
+}
+
+void leerVentas(Venta** arrayVentas, int numVentas, const char* filename) {
+    std::ifstream archivo(filename);
+    if (!archivo) {
+        std::cerr << "Error al abrir el archivo para leer." << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < numVentas; ++i) {
+        arrayVentas[i] = new Venta();        // Crear nuevo objeto Venta
+        archivo >> *arrayVentas[i];          // Deserializar cada venta
+    }
+
+    archivo.close();
 }
