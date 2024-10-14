@@ -65,7 +65,7 @@ int main()
                 string delStation = "";
                 bool desact = true;
                 cin>>delStation;
-                for (int i=0;i<=tam;i++){
+                for (int i=0;i<tam;i++){
                     if (estaciones[i]->getNombre()==delStation){
                         for(int j= 0; j<=12;j++){
                             Surtidor* verificar = estaciones[i]->getSurtidores();
@@ -80,14 +80,15 @@ int main()
                         delete estaciones[i];
                         contEstaciones-=1;
                         cout<<"estacion borrada"<<endl;
-                        break;
+                        break; //verificar
                     }
                 }
 
 
             }
             else if (accionRed == 3){
-                cout<<"a"<<endl;
+                cout<<"verificar ventas en cada E/S del pais por categoria"<<endl;
+
             }
             else if (accionRed == 4){
 
