@@ -41,6 +41,8 @@ public:
     void setEstacion(string est);
     void setSurtidor(string surt);
 
+    ~Venta();
+
     //Metodos
 
     void guardarVentaBinario(std::ofstream& archivo) const;

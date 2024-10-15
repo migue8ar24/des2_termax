@@ -17,10 +17,11 @@ private:
     Venta** listaVentas;
     Tanque tanquePrincipal;
     Surtidor* arraySurtidores;
+    int cantVentas;
 
 
 public:
-    EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVenta, Tanque tanqueGas, Surtidor* arraySurtidores);
+    EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVenta, Tanque tanqueGas, Surtidor* arraySurtidores, int cantV);
     EstServ();
 
     // Getters
@@ -29,9 +30,10 @@ public:
     string getGerente();
     Zona getRegion() ;
     string getUbicacion();
-    Venta getListaVentas();
-    Tanque getTanquePrincipal();
+    Venta** getListaVentas();
+    Tanque& getTanquePrincipal();
     Surtidor* getSurtidores();
+    int getCantVentas();
 
     //setters
     void setNombre(string _nombre);
@@ -44,6 +46,7 @@ public:
     void setSurtidores(Surtidor* _arraySurtidores);
 
     //metodos problema
+    void calcularCantidadCombustibleVendida(Tanque &tanque);
     void guardarEstServBinario(std::ofstream& archivo) const;
     void cargarEstServBinario(std::ifstream& archivo);
     void verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra);

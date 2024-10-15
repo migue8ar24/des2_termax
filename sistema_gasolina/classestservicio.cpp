@@ -10,7 +10,7 @@
 #include <string> //manejo strings
 using namespace std;
 
-EstServ:: EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVenta, Tanque tanqueGas, Surtidor* arraySurtidor ){
+EstServ:: EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVenta, Tanque tanqueGas, Surtidor* arraySurtidor, int cantV ){
     nombre = nom;
     codigo = rand() % 100; //verificacion de no existente
     gerente = ger;
@@ -19,13 +19,14 @@ EstServ:: EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVen
     listaVentas = arrayVenta;
     tanquePrincipal = tanqueGas;
     arraySurtidores = new Surtidor[12];
+    cantVentas = cantV;
     for (int i = 0; i < 12; i++) {
         arraySurtidores[i] = arraySurtidor[i];  // Asignar el arreglo recibido
     }
 
 }
 
-EstServ::EstServ(): nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion(""), listaVentas(nullptr), tanquePrincipal(),arraySurtidores(nullptr){
+EstServ::EstServ(): nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion(""), listaVentas(nullptr), tanquePrincipal(),arraySurtidores(nullptr), cantVentas(1){
 }
 
 // Getters
@@ -38,21 +39,27 @@ int EstServ::getCodigo() {
 string EstServ::getGerente() {
     return gerente;
 }
+
 Zona EstServ::getRegion() {
     return region;
 }
 string EstServ::getUbicacion() {
     return  ubicacion;
 }
-Venta EstServ::getListaVentas() {
-    return  **listaVentas;
+Venta** EstServ::getListaVentas() {
+    return listaVentas;
 }
-Tanque EstServ::getTanquePrincipal() {
-    return  tanquePrincipal;
+
+Tanque& EstServ::getTanquePrincipal() {
+    return tanquePrincipal;
 }
 
 Surtidor* EstServ::getSurtidores() {
-    return  arraySurtidores;
+    return arraySurtidores;
+}
+
+int EstServ:: getCantVentas() {
+    return cantVentas;
 }
 
 //setters
@@ -65,6 +72,7 @@ void EstServ::setCodigo(int _codigo) {
 void EstServ::setGerente(string _gerente) {
     gerente = _gerente;
 }
+
 void EstServ::setRegion(Zona _region) {
     region = _region;
 }
@@ -81,6 +89,7 @@ void EstServ::setSurtidores(Surtidor* _arraySurtidor) {
     arraySurtidores = _arraySurtidor;
 }
 
+/*
 EstServ::~EstServ() {
     for (int i = 0; i < 10; i++) {  // O el tamaño adecuado para el arreglo
         delete listaVentas[i];  // Eliminar cada objeto Venta
@@ -88,6 +97,25 @@ EstServ::~EstServ() {
 
     delete[] arraySurtidores;
 }
+*/
+EstServ::~EstServ() {
+    // Liberar la memoria asignada para los surtidores
+    if (arraySurtidores) {
+        delete[] arraySurtidores;  // Arreglo dinámico de surtidores
+        arraySurtidores = nullptr;
+    }
+
+    // Liberar la memoria asignada para las ventas
+    if (listaVentas) {
+        cout << cantVentas;
+        for (int i = 0; i < cantVentas; ++i) {
+            delete listaVentas[i];  // Eliminar cada venta
+        }
+        delete[] listaVentas;  // Eliminar el arreglo dinámico de ventas
+        listaVentas = nullptr;
+    }
+}
+
 
 void EstServ::guardarEstServBinario(std::ofstream& archivo) const {
     size_t length;
@@ -121,11 +149,12 @@ void EstServ::guardarEstServBinario(std::ofstream& archivo) const {
         arraySurtidores[i].guardarSurtidorBinario(archivo);
     }
 
-    // Guardar Ventas (suponiendo que hay un número fijo de ventas, por ejemplo, 10)
-    int numVentas = 10;  // Cambiar según el número real de ventas
-    for (int i = 0; i < numVentas; ++i) {
+    for (int i = 0; i < cantVentas; ++i) {
         listaVentas[i]->guardarVentaBinario(archivo);
     }
+
+    // Guardar cantVentas
+    archivo.write(reinterpret_cast<const char*>(&cantVentas), sizeof(cantVentas));
 }
 
 void EstServ::cargarEstServBinario(std::ifstream& archivo) {
@@ -171,13 +200,14 @@ void EstServ::cargarEstServBinario(std::ifstream& archivo) {
         arraySurtidores[i].cargarSurtidorBinario(archivo);
     }
 
-    // Cargar Ventas (suponiendo que hay un número fijo de ventas, por ejemplo, 10)
-    int numVentas = 10;  // Cambiar según el número real de ventas
-    listaVentas = new Venta*[numVentas];
-    for (int i = 0; i < numVentas; ++i) {
+    listaVentas = new Venta*[cantVentas];
+    for (int i = 0; i < cantVentas; ++i) {
         listaVentas[i] = new Venta();  // Crear nuevas ventas
         listaVentas[i]->cargarVentaBinario(archivo);
     }
+
+    // Cargar cantVentas
+    archivo.read(reinterpret_cast<char*>(&cantVentas), sizeof(cantVentas));
 }
 
 void EstServ::verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPremium, int vendidoEcoExtra) {
@@ -202,4 +232,30 @@ void EstServ::verificarFugas(Tanque &tanque, int vendidoRegular, int vendidoPrem
     // Si no hay fugas
     if (totalRegular > 0.95 * tanque.getCapacidadRegular() && totalPremium > 0.95 * tanque.getCapacidadPremium() && totalEcoExtra > 0.95 * tanque.getCapacidadEcoExtra())
         cout << "No se detectaron fugas en la estacion." << endl;
+}
+
+void EstServ::calcularCantidadCombustibleVendida(Tanque &tanque) {
+    int cantidadRegular = 0, cantidadPremium = 0, cantidadEcoExtra = 0;
+
+    for (int i = 0; i < cantVentas; i++) {
+        if (listaVentas[i] != nullptr) {  // Verificar que la venta no sea nula
+            TComb tipoCombustible = listaVentas[i]->getComb(); // Asumiendo que tienes un método para obtener el tipo de combustible
+            int cantidad = listaVentas[i]->getCantidad(); // Asumiendo que tienes un método para obtener la cantidad
+
+            switch (tipoCombustible) {
+            case TComb::REGULAR:
+                cantidadRegular += cantidad;
+                break;
+            case TComb::PREMIUM:
+                cantidadPremium += cantidad;
+                break;
+            case TComb::ECOEXTRA:
+                cantidadEcoExtra += cantidad;
+                break;
+            }
+        }
+    }
+
+    // Invocar la función verificarFugas con las cantidades vendidas
+    verificarFugas(tanque, cantidadRegular, cantidadPremium, cantidadEcoExtra);
 }
