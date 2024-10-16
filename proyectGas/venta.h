@@ -41,8 +41,19 @@ public:
     void setEstacion(string est);
     void setSurtidor(string surt);
 
+    //Metodos
+
+    void guardarVentaBinario(std::ofstream& archivo) const;
+    void cargarVentaBinario(std::ifstream& archivo);
+
     // Método opcional para mostrar detalles de la venta
     void mostrarVenta();
+
+    // Declaración de las sobrecargas de los operadores
+    friend ostream& operator<<(std::ostream& os, TComb comb);
+    friend ostream& operator<<(std::ostream& os, TPago pago);
+    friend ostream& operator<<(std::ostream& os, const Venta& venta);
+    friend istream& operator>>(std::istream& is, Venta& venta);
 };
 
 

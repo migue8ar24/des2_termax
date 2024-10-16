@@ -35,7 +35,8 @@ public:
     void setCapacidadEcoExtra(int _capacidadEcoExtra);
 
     //metodos problema, funciones amigas
-
+    void guardarTanqueBinario(ofstream& archivo) const;
+    void cargarTanqueBinario(ifstream& archivo);
     ~Tanque();
 };
 
