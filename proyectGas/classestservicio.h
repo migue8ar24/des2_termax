@@ -31,11 +31,17 @@ public:
     Zona getRegion() ;
     string getUbicacion();
     Venta** getListaVentas();
+<<<<<<< HEAD:proyectGas/classestservicio.h
     Venta getObjetoVenta();
     Tanque getTanquePrincipal();
     Surtidor* getSurtidores();
     int getCantVentas();
     Tanque& getObjetoTanque();
+=======
+    Tanque& getTanquePrincipal();
+    Surtidor* getSurtidores();
+    int getCantVentas();
+>>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.h
 
     //
     void setNombre(string _nombre);

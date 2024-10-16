@@ -78,6 +78,8 @@ void Venta::setPagado(int pag) {
     pagado = pag;
 }
 
+Venta::~Venta() {}
+
 std::ostream& operator<<(std::ostream& os, TComb comb) {
     switch (comb) {
     case TComb::REGULAR:
