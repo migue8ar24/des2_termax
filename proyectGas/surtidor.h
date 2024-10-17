@@ -13,7 +13,7 @@ private:
     string modelo;
     bool activado;
 public:
-    Surtidor(string mod);
+    Surtidor(string mod,int _cod);
     Surtidor();
     // Getters
     int getCodId();
@@ -25,6 +25,9 @@ public:
     void setModelo(string _modelo);
     void setActivado(bool _activado);
     //metodos problema
+
+    void guardarSurtidorBinario(std::ofstream& archivo) const;
+    void cargarSurtidorBinario(std::ifstream& archivo);
 
     ~Surtidor();
 };

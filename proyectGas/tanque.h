@@ -18,6 +18,7 @@ private:
 
 public:
     Tanque();
+    Tanque(int _capacidadRegular,int _capacidadPremium,int _capacidadEcoExtra,int _gasDispRegular,int _gasDispPremium,int _gasDispEcoExtra);
     // Getters
     int getDispRegular();
     int getDispPremium();
@@ -35,7 +36,8 @@ public:
     void setCapacidadEcoExtra(int _capacidadEcoExtra);
 
     //metodos problema, funciones amigas
-
+    void guardarTanqueBinario(ofstream& archivo) const;
+    void cargarTanqueBinario(ifstream& archivo);
     ~Tanque();
 };
 
