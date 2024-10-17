@@ -24,6 +24,8 @@ void aSurtidor(EstServ** estaciones,int cant);
 void actSurtidor(EstServ** estaciones,int cant);
 void imprimirVentasEst(EstServ** estaciones,int cant);
 void imprimirLitros(EstServ** estaciones, int cant);
+void randCapacidad(EstServ** estaciones, int cant);
+void hacerVenta(EstServ** estaciones, int cant, int _precioRegN,int _precioPremN,int _precioEcoN,int _precioRegC,int _precioPremC,int _precioEcoC,int _precioRegS,int _precioPremS,int _precioEcoS);
 #endif // FUNCH_H
 
 

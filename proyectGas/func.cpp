@@ -179,8 +179,6 @@ void leerVentas(Venta** arrayVentas, int numVentas, const char* filename) {
     archivo.close();
 }
 
-
-
 EstServ* seleccionarEstacion(EstServ* estaciones, int numEstaciones, const string& nombreEstacion) {
     for (int i = 0; i < numEstaciones; ++i) {
         if (estaciones[i].getNombre() == nombreEstacion) {
@@ -340,23 +338,6 @@ void actSurtidor(EstServ** estaciones,int cant){
     }
 }
 
-/*
-void hacerVenta(EstServ** estaciones,int cant){
-    string est="";
-    cout << "Bienvenido a Termax, en que estacion se encuentra?" << endl;
-    cin>>est;
-    for(int j=0;j<cant;j++){
-        if(estaciones[j]->getNombre()==est){
-            Surtidor* array = estaciones[j]->getListaVentas();
-
-
-
-        }
-    }
-}
-*/
-
-
 void imprimirVentasEst(EstServ** estaciones,int cant){
     cout<<"en que estacion desea conocer las ventas?"<<endl;
     string estacion = "";
@@ -373,7 +354,7 @@ void imprimirVentasEst(EstServ** estaciones,int cant){
 }
 
 void imprimirLitros(EstServ** estaciones, int cant){
-    cout<<"en que estacion desea conocer las ventas?"<<endl;
+    cout<<"en que estacion desea conocer los litros vendidos?"<<endl;
     string estacion = "";
     cin>>estacion;
     for(int j=0;j<cant;j++){
@@ -414,3 +395,181 @@ string zonaToString(Zona reg) {
     }
 }
 
+void randCapacidad(EstServ** estaciones, int cant){
+    cout << "Que estacion desea reconfigurar?" << endl;
+    string estacion = "";
+    cin>>estacion;
+    for(int j=0;j<cant;j++){
+        if(estaciones[j]->getNombre()==estacion){
+            Tanque cambio = estaciones[j]->getTanquePrincipal();
+            int capReg = cambio.getCapacidadRegular();
+            int capPrem =cambio.getCapacidadPremium();
+            int CapEco =cambio.getCapacidadEcoExtra();
+            int gasDispReg = 100+ rand() % capReg;
+            int gasDispPrem = 100+ rand() % capPrem;
+            int gasDispEcoExtra = 100+ rand() % CapEco;
+            estaciones[j]->setTanquePrincipal(Tanque(capReg,capPrem,CapEco,gasDispReg,gasDispPrem,gasDispEcoExtra));
+            break;
+        }
+    }
+}
+
+void hacerVenta(EstServ** estaciones, int cant, int _precioRegN,int _precioPremN,int _precioEcoN,int _precioRegC,int _precioPremC,int _precioEcoC,int _precioRegS,int _precioPremS,int _precioEcoS) {
+
+    string estacionVenta;
+    int codSurt;
+    int cantidad;
+    TComb comb;
+    string combustible;
+    string tipoPago="";
+    TPago pago;
+    int documento;
+    int pagado;
+
+
+    cout<<"Ingrese la estacion donde se encuentra"<<endl;
+    cin>>estacionVenta;
+    cout<<"Ingrese el codigo del surtidor de compra"<<endl;
+    cin>>codSurt;
+    cout<<"Ingrese la cantidad de combustible que desea comprar"<<endl;
+    cin>>cantidad;
+    cout<<"Ingrese el tipo de combustible que desea comprar(REGULAR,PREMIUM,ECOEXTRA)"<<endl;
+    cin>>combustible;
+    if (combustible == "REGULAR") {
+        comb = TComb::REGULAR;
+    }
+    else if (combustible == "PREMIUM") {
+        comb = TComb::PREMIUM;
+    }
+    else if (combustible == "ECOEXTRA") {
+        comb = TComb::ECOEXTRA;
+    }
+    else {
+        cerr << "combustible desconocido, asignando valor por defecto (REGULAR)" <<endl;
+        comb = TComb::REGULAR;
+    }
+    cout<<"Ingrese el tipo de pago(EFECTIVO,TDEBITO,TCREDITO)"<<endl;
+    cin>>tipoPago;
+    if (tipoPago == "EFECTIVO") {
+        pago = TPago::EFECTIVO;
+    }
+    else if (tipoPago == "TDEBITO") {
+        pago = TPago::TDEBITO;
+    }
+    else if (tipoPago == "TCREDITO") {
+        pago = TPago::TCREDITO;
+    }
+    else {
+        cerr << "metodo de pago desconocido, asignando valor por defecto (EFECTIVO)" <<endl;
+        pago = TPago::EFECTIVO;
+    }
+    cout<<"Ingrese su documento"<<endl;
+    cin>>documento;
+
+
+
+    for(int j=0;j<cant;j++){
+        if(estaciones[j]->getNombre()==estacionVenta){
+            Venta** ventasEstacion = estaciones[j]->getListaVentas();
+            Surtidor* arraySurt = estaciones[j]->getSurtidores();
+            Tanque tanque = estaciones[j]->getTanquePrincipal();
+            int cantVent = estaciones[j]->getCantVentas();
+
+
+            Zona precioPorLitro = estaciones[j]->getRegion();
+            unsigned int precioComb;
+            if ((precioPorLitro == Zona::NORTE) && (comb == TComb::REGULAR)){
+                precioComb = _precioRegN;
+            }
+            if ((precioPorLitro == Zona::NORTE) && (comb == TComb::PREMIUM)){
+                precioComb = _precioPremN;
+            }
+            if ((precioPorLitro == Zona::NORTE) && (comb == TComb::ECOEXTRA)){
+                precioComb = _precioEcoN;
+            }
+            if ((precioPorLitro == Zona::CENTRO) && (comb == TComb::REGULAR)){
+                precioComb = _precioRegC;
+            }
+            if ((precioPorLitro == Zona::CENTRO) && (comb == TComb::PREMIUM)){
+                precioComb = _precioPremC;
+            }
+            if ((precioPorLitro == Zona::CENTRO) && (comb == TComb::ECOEXTRA)){
+                precioComb = _precioEcoC;
+            }
+            if ((precioPorLitro == Zona::SUR) && (comb == TComb::REGULAR)){
+                precioComb = _precioRegS;
+            }
+            if ((precioPorLitro == Zona::SUR) && (comb == TComb::PREMIUM)){
+                precioComb = _precioPremS;
+            }
+            if ((precioPorLitro == Zona::SUR) && (comb == TComb::ECOEXTRA)){
+                precioComb = _precioEcoS;
+            }
+
+            pagado = cantidad*precioComb;
+
+
+            // Verificar y disminuir la cantidad de gasolina en el tanque
+            bool ventaExitosa = false;
+            switch (comb) {
+            case TComb::REGULAR:
+                if (tanque.getDispRegular() >= cantidad) {
+                    tanque.setDispRegular(tanque.getDispRegular() - cantidad);
+                    ventaExitosa = true;
+                }
+                break;
+            case TComb::PREMIUM:
+                if (tanque.getDispPremium() >= cantidad) {
+                    tanque.setDispPremium(tanque.getDispPremium() - cantidad);
+                    ventaExitosa = true;
+                }
+                break;
+            case TComb::ECOEXTRA:
+                if (tanque.getDispEcoExtra() >= cantidad) {
+                    tanque.setDispEcoExtra(tanque.getDispEcoExtra() - cantidad);
+                    ventaExitosa = true;
+                }
+                break;
+            }
+
+            if (!ventaExitosa) {
+                std::cout << "No hay suficiente combustible en el tanque para esta venta." << std::endl;
+                return;
+            }
+
+            if (cantVent+1 > cantVent){
+                unsigned short int nuevaCapacidad =  cantVent+10;
+                Venta** nuevoArray = new Venta*[nuevaCapacidad];
+                for (int i = 0; i <cantVent ; i++) {
+                    nuevoArray[i] = ventasEstacion[i];
+                }
+                for (int i = cantVent ; i < nuevaCapacidad; i++) {
+                    nuevoArray[i] = nullptr;
+                }
+
+                delete[] ventasEstacion;
+                ventasEstacion = nuevoArray;
+                estaciones[j]->setListaVentas(ventasEstacion);
+            }
+
+            for(int poSurt = 0; poSurt<12;poSurt++){
+                if ((arraySurt[poSurt].getCodId()== codSurt) && (arraySurt[poSurt].getActivado() == true)){
+                    ventasEstacion[estaciones[j]->getCantVentas()] = new Venta(cantidad, comb, pago, documento, pagado, estacionVenta, to_string(codSurt));
+                    estaciones[j]->setCantVentas(cantVent+1);
+                    cout << "Venta realizada exitosamente:" << endl;
+                    cout << "Surtidor: " <<codSurt << endl;
+                    cout << "Combustible: " << (comb == TComb::REGULAR ? "Regular" : comb == TComb::PREMIUM ? "Premium" : "EcoExtra") << endl;
+                    cout << "Litros vendidos: " << cantidad << endl;
+                    cout << "Precio total: $" << pagado << endl;
+                    cout << "Metodo de pago: " << (pago == TPago::EFECTIVO ? "Efectivo" : pago == TPago::TDEBITO ? "Tdebito" : "Tcredito") << endl;
+                    cout << "Documento cliente: " << documento << endl;
+                }
+            }
+
+        }
+
+    }
+
+
+
+}

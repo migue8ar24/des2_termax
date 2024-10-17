@@ -27,11 +27,8 @@ EstServ:: EstServ(string nom, string ger, Zona reg, string ubi, Venta** arrayVen
 
 }
 
-<<<<<<< HEAD:proyectGas/classestservicio.cpp
 EstServ::EstServ(): nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion(""), listaVentas(nullptr), tanquePrincipal(),arraySurtidores(nullptr),cantVentas(1){
-=======
-EstServ::EstServ(): nombre(""), codigo(0), gerente(""), region(Zona::CENTRO), ubicacion(""), listaVentas(nullptr), tanquePrincipal(),arraySurtidores(nullptr), cantVentas(1){
->>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.cpp
+
 }
 
 // Getters
@@ -51,7 +48,6 @@ Zona EstServ::getRegion() {
 string EstServ::getUbicacion() {
     return  ubicacion;
 }
-<<<<<<< HEAD:proyectGas/classestservicio.cpp
 Venta EstServ::getObjetoVenta() {
     return  **listaVentas;
 }
@@ -61,23 +57,12 @@ Venta** EstServ::getListaVentas(){
 
 Tanque EstServ::getTanquePrincipal() {
     return  tanquePrincipal;
-=======
-Venta** EstServ::getListaVentas() {
-    return listaVentas;
-}
-
-Tanque& EstServ::getTanquePrincipal() {
-    return tanquePrincipal;
->>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.cpp
 }
 
 Surtidor* EstServ::getSurtidores() {
     return arraySurtidores;
 }
 
-int EstServ:: getCantVentas() {
-    return cantVentas;
-}
 int EstServ:: getCantVentas() {
     return cantVentas;
 }
@@ -112,15 +97,12 @@ void EstServ::setSurtidores(Surtidor* _arraySurtidor) {
     arraySurtidores = _arraySurtidor;
 }
 
-<<<<<<< HEAD:proyectGas/classestservicio.cpp
+
 void EstServ::setCantVentas(int _cantVentas) {
     cantVentas = _cantVentas;
 }
 
 
-=======
-/*
->>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.cpp
 EstServ::~EstServ() {
     // Liberar la memoria asignada para los surtidores
     if (arraySurtidores) {
@@ -138,25 +120,6 @@ EstServ::~EstServ() {
         listaVentas = nullptr;
     }
 }
-*/
-EstServ::~EstServ() {
-    // Liberar la memoria asignada para los surtidores
-    if (arraySurtidores) {
-        delete[] arraySurtidores;  // Arreglo dinámico de surtidores
-        arraySurtidores = nullptr;
-    }
-
-    // Liberar la memoria asignada para las ventas
-    if (listaVentas) {
-        cout << cantVentas;
-        for (int i = 0; i < cantVentas; ++i) {
-            delete listaVentas[i];  // Eliminar cada venta
-        }
-        delete[] listaVentas;  // Eliminar el arreglo dinámico de ventas
-        listaVentas = nullptr;
-    }
-}
-
 
 void EstServ::guardarEstServBinario(std::ofstream& archivo) const {
     size_t length;
@@ -195,14 +158,9 @@ void EstServ::guardarEstServBinario(std::ofstream& archivo) const {
         }
     }
 
-<<<<<<< HEAD:proyectGas/classestservicio.cpp
     // Escribir los surtidores
     for (int i = 0; i < 12; i++) {
         arraySurtidores[i].guardarSurtidorBinario(archivo);  // Asumimos que Surtidor tiene una función de serialización
-=======
-    for (int i = 0; i < cantVentas; ++i) {
-        listaVentas[i]->guardarVentaBinario(archivo);
->>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.cpp
     }
 
     // Guardar cantVentas
@@ -244,17 +202,11 @@ void EstServ::cargarEstServBinario(std::ifstream& archivo) {
         listaVentas[i]->cargarVentaBinario(archivo); // Asegurar que Venta tiene su propia función de deserialización
     }
 
-<<<<<<< HEAD:proyectGas/classestservicio.cpp
+
     // Leer los surtidores
     arraySurtidores = new Surtidor[12];
     for (int i = 0; i < 12; i++) {
         arraySurtidores[i].cargarSurtidorBinario(archivo); // Asumimos que Surtidor tiene una función de deserialización
-=======
-    listaVentas = new Venta*[cantVentas];
-    for (int i = 0; i < cantVentas; ++i) {
-        listaVentas[i] = new Venta();  // Crear nuevas ventas
-        listaVentas[i]->cargarVentaBinario(archivo);
->>>>>>> a20dbc71eab061ed625ee8c4e1f496fc9ec55bd6:sistema_gasolina/classestservicio.cpp
     }
 
     // Cargar cantVentas
