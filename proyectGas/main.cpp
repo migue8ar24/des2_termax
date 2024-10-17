@@ -43,8 +43,22 @@ int main()
             if (accionRed == 1) {
                 cout << "Agregar estacion" << endl;
 
-                //crear array de 1 venta en 0 para ser expandida en el futuro
-                int cantVent = 1;
+                if (contEstaciones+1 > contEstaciones){
+                    unsigned short int nuevaCapacidad =  contEstaciones+10;
+                    EstServ** nuevoArray = new EstServ*[nuevaCapacidad];
+                    for (int i = 0; i <contEstaciones ; i++) {
+                        nuevoArray[i] = estaciones[i];
+                    }
+                    for (int i = contEstaciones ; i < nuevaCapacidad; i++) {
+                        nuevoArray[i] = nullptr;
+                    }
+                    delete[] estaciones;
+                    estaciones = nuevoArray;
+                    tam = nuevaCapacidad;
+                }
+
+                //crear array de 10 venta en 0 para ser expandida en el futuro
+                int cantVent = 10;
                 Venta** arrayVentas = new Venta*[cantVent];
                 for (int i = 0; i < cantVent; ++i) {
                     arrayVentas[i] = new Venta();
@@ -63,8 +77,6 @@ int main()
 
                 // Incrementar el contador de estaciones
                 contEstaciones++;
-
-
             }
 
             else if (accionRed == 2){
@@ -166,19 +178,14 @@ int main()
             }
             else if (accionRed == 5) {
                 cout << "hacer una venta de combustible" << endl;
+                hacerVenta(estaciones, contEstaciones, precioRegN,precioPremN,precioEcoN,precioRegC,precioPremC,precioEcoC,precioRegS,precioPremS,precioEcoS);
+
             }
             else if (accionRed == 6) {
                 cout<< "Asignar la capacidad del tanque de suministro, con un valor aleatorio entre \n"
                     <<"100 y 200 litros para cada una de las categorias" << endl;
-                cout << "Que estacion desea reconfigurar?" << endl;
-                /*string estacion = "";
-                cin>>estacion;
-                for(int j=0;j<cant;j++){
-                    if(estaciones[j]->getNombre()==estacion){
-                        estaciones[j]->setTanquePrincipal(Tanque())
+                randCapacidad(estaciones, contEstaciones);
 
-                    }
-                */
             }
             else{
                 cout<<"Accion no disponible"<<endl;
@@ -190,7 +197,6 @@ int main()
             string nombreEstacion;
             cout << "Ingrese el nombre de la estacion para verificar fugas: ";
             cin >> nombreEstacion;
-
             verificarFugas(*estaciones, tam, nombreEstacion);
         }
         else if (accion == 4){
@@ -198,7 +204,6 @@ int main()
             string nombreEstacion;
             cout << "Ingrese el nombre de la estacion: ";
             cin >> nombreEstacion;
-
             // Llamar a la función para simular la venta en la estación seleccionada
             simularVentaEnEstacion(*estaciones, tam , nombreEstacion);
         }

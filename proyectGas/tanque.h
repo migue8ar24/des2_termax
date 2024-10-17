@@ -18,6 +18,7 @@ private:
 
 public:
     Tanque();
+    Tanque(int _capacidadRegular,int _capacidadPremium,int _capacidadEcoExtra,int _gasDispRegular,int _gasDispPremium,int _gasDispEcoExtra);
     // Getters
     int getDispRegular();
     int getDispPremium();

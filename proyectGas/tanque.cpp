@@ -11,10 +11,18 @@ Tanque::Tanque() {
     capacidadRegular = 100+ rand() % 200;
     capacidadPremium = 100+ rand() % 200;
     capacidadEcoExtra = 100+ rand() % 200;
-    gasDispRegular = 100+ rand() % capacidadRegular;
-    gasDispPremium = 100+ rand() % capacidadPremium;
-    gasDispEcoExtra = 100+ rand() % capacidadEcoExtra;
+    gasDispRegular = capacidadRegular;
+    gasDispPremium = capacidadPremium;
+    gasDispEcoExtra = capacidadEcoExtra;
 
+}
+Tanque::Tanque(int _capacidadRegular,int _capacidadPremium,int _capacidadEcoExtra,int _gasDispRegular,int _gasDispPremium,int _gasDispEcoExtra) {
+    capacidadRegular = _capacidadRegular;
+    capacidadPremium = _capacidadPremium;
+    capacidadEcoExtra = _capacidadEcoExtra;
+    gasDispRegular = _gasDispRegular;
+    gasDispPremium = _gasDispPremium;
+    gasDispEcoExtra = _gasDispEcoExtra;
 }
 
 // Getters
